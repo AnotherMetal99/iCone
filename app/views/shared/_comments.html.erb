@@ -1,0 +1,12 @@
+<div class="comments-feed">
+  <% @comments.each do |comment| %>
+    <p><%= link_to image_tag(comment.user.avatar, width:'40px', class:"round"), profile_path(comment.user.username) if current_user.avatar.attached? %>
+      <strong><%= link_to comment.user.username , profile_path(comment.user.username), class:"text-dark" %></strong>
+      <%= comment.comment %>
+      <div class="text-muted"><%= comment.created_at.strftime("%d %B, %Y %I:%M:%p") %></div>
+      <% if current_user.posts.exists?(@post.id) || current_user == comment.user %>
+        <%= link_to 'Delete', [comment.post, comment], :confirm => 'Are you sure?', :method => :delete %>
+      <% end %>
+    <% end %>
+  </p>
+</div>

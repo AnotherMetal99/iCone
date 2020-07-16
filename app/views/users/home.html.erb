@@ -1,0 +1,16 @@
+<h1 class="mt-5">Welcome to iCone
+</h1>
+<p class="lead">Please sign in or register</p>
+<ul class="list-unstyled">
+  <% if current_user %>
+    <p><%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
+    </p>
+    <p><%= link_to 'Edit', edit_user_registration_path %>
+    </p>
+    <span class="p-2 text-dark"><%= link_to "О нас", profile_path(current_user.username) %></span>
+  <% else %>
+    <p><%= link_to 'Create Account', new_user_registration_path %>
+    </p>
+    <p><%= link_to 'Sign in', new_user_session_path %>
+    </p>
+  <% end %>

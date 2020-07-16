@@ -1,0 +1,5 @@
+<% @followers.each do |user|%>
+  <div class="recommended-follower">
+    <%= link_to image_tag(user.avatar,class:"round"), profile_path(user.username) %>
+    <strong><%= link_to user.username, profile_path(user.username), class:"text-dark" %></strong>
+  <% end %>

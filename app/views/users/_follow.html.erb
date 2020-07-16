@@ -1,0 +1,9 @@
+<% if @user != current_user %>
+  <% if user_signed_in?  %>
+    <% if current_user.following?(@user) %>
+      <%= button_to "UnFollow", relationships_path(user_id: @user.id), method: :delete , class:"btn btn-outline-danger" %></button>
+  <% else %>
+    <%= button_to "Follow", relationships_path(user_id: @user.id),class:"btn btn-outline-primary" %></button>
+<% end %>
+<% end %>
+<% end %>

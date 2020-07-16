@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <% @posts.each do |post| %>
+        <div class="inst">
+          <div class="post-meta">
+            <%= link_to image_tag(post.user.avatar,class:"round"), profile_path(post.user.username) if current_user.avatar.attached? %>
+            <%= link_to post.user.username, profile_path(post.user.username), class:"text-dark" %>
+            <p><%= link_to image_tag(post.thumbnail, width:'600px',height:"600px", ), post %></p>
+            <div class="tab">
+              <%= post.likes.count %>
+              <%= (post.likes.count) == 1 ? 'Like' : 'Likes'%>
+              <a class="tab active">
+                <i class="fa fa-comment"></i>
+                <%= post.comments.count %></a>
+              <div class="posts">
+                <p>
+                  <strong><%= link_to post.user.username, profile_path(post.user.username),class:"text-dark" %></strong>
+                  <%= simple_format post.body %></p>
+              </div>
+            </div>
+          </div>
+          <p class="text-muted"><%= time_ago_in_words post.created_at %>
+            ago</p>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-4">
+      <div class="account-summary">
+        <p>
+          <%= link_to image_tag(current_user.avatar_thumbnail,class:"round"), profile_path(current_user.username) if current_user.avatar.attached? %>
+          <strong><%= link_to current_user.username , profile_path(current_user.username) , class:"text-dark" %></strong>
+        </p>
+        <p>
+          <%= current_user.full_name %></p>
+      </div>
+      <div class="follower-suggestions">
+
+        <p class="text-muted">Suggestions for you
+        </p>
+        <%= render "follower_suggestions" %>
+      </div>
+    </div>
+  </div>
+</div>

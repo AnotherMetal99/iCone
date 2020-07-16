@@ -1,0 +1,31 @@
+@import "bootstrap/scss/bootstrap";
+@import "font-awesome";
+@import "users";
+@import "posts";
+
+body {
+  background-color: #fafafa;
+  font-size: 14px;
+  color: #262626;
+}
+
+.navbar {
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.0975);
+  height: 77px;
+}
+
+ .container{
+   max-width: 1000px;
+ }
+
+.comment-box{
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #fff;
+}
+
+.comments-feed{
+  height: 220px;
+  overflow: auto;
+}

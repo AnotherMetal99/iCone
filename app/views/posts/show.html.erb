@@ -1,0 +1,40 @@
+<div class="post-show row">
+  <div class="col-md-8">
+    <%=image_tag @post.thumbnail, class: 'image' %>
+  </div>
+  <div class="col-md-4">
+    <div class="user">
+      <div class="avatar">
+        <% if @post.user.avatar.attached? %>
+          <%= link_to profile_path(@post.user.username) do %>
+          <%= image_tag @post.user.avatar %>
+        <% end %>
+      <% end %>
+    </div>
+    <%= link_to @post.user.username, profile_path(@post.user.username), class: 'username' %>
+  </div>
+  <div class="description">
+    <%= render "shared/likes" %>
+    <p><%= @post.likes.count %>
+      <%= (@post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
+    <%= @post.body %><hr/>
+    <%= render "shared/comments" %>
+    <div class="input-group mb-3">
+      <%= form_with model: [@post, @comment], local: true do |f| %>
+      <hr/>
+      <div class="input-group">
+        <%= f.text_field :comment, placeholder:"Add comment here...", class: "form-control" %><hr/>
+        <%= f.submit "Post",class:"btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="delete">
+  <% if current_user.posts.exists?(@post.id) %>
+    <%= link_to 'Remove',post_path(@post), method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%= link_to 'Edit', edit_post_path(@post) %>
+  <% end %>
+  <%= link_to 'Back', dashboard_path %>
+</div>
+</div>
+</div>
