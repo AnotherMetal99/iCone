@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   subject{ build(:user)}
-
   context 'validation test' do
     it 'ensured username presence' do
       user = User.new(username: 'Username', email: 'antares@gmail.com').save
