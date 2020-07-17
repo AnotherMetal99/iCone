@@ -1,8 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+<<<<<<< HEAD:spec/models/user_spec.rb
   subject { build(:user) }
 
+=======
+  subject{ build(:user)}
+>>>>>>> 730537f57f616738c09b63aaaa72e9be3c2a9539:спекуляция/модели/user_spec.rb
   context 'validation test' do
     it 'ensured username presence' do
       user = User.new(username: 'User', email: 'antares@gmail.com')
