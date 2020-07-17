@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
-before_action :set_post
-before_action :authenticate_user!
+  before_action :set_post
+  before_action :authenticate_user!
 
   def create
     @comment = @post.comments.new(comment_params)
@@ -16,6 +16,7 @@ before_action :authenticate_user!
   end
 
   private
+
   def comment_params
     params.require(:comment).permit(:comment, :post_id)
   end
