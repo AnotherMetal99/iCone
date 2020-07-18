@@ -24,13 +24,18 @@ jobs:
     needs: rubocop-test
     runs-on: ubuntu-18.04
     services:
-      postgres:
-        image: postgres:latest
-        ports:
-        - 5432:5432
-        env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+      db:
+        image: postgres:11
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis
+        ports: ['6379:6379']
+        options: --entrypoint redis server
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
@@ -39,7 +44,13 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
       - uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: install 
+          cmd: install
+      - name: Build and run test
+        env:
+          DATABASE_URL: postgres://posgtres:@localhost:5432/test
+          REDIS_URL: redis://localhost:6379/0
+          RAILS_ENV: test
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       - name: Install postgres client
         run: sudo apt-get -yqq install libpq-dev
       - name: Install dependencies
@@ -48,10 +59,8 @@ jobs:
           bundler install
       - name: Create database
         run: |
-          bundler exec rails db:create
-          bundler exec rails db:migrate
-      - name: Run tests
-        run: bundler exec rake
+          bundler exec rails db:prepare
+          bundler exec rails test
       - name: Upload coverage results
         uses: actions/upload-artifact@master
         if: always()
