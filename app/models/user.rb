@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
@@ -47,8 +49,8 @@ class User < ApplicationRecord
 
   private
 
-  def add_default_avatar
-    unless avatar.attached?
+  def add_default_avatar # rubocop:todo Metrics/MethodLength
+    unless avatar.attached? # rubocop:todo Style/GuardClause
       avatar.attach(
         io: File.open(
           Rails.root.join(
@@ -58,6 +60,6 @@ class User < ApplicationRecord
         filename: '/default_profile.jpg',
         content_type: 'image/jpg'
       )
-     end
+    end
   end
 end

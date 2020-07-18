@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
   before_action :authenticate_user!, except: %i[show index]
   before_action :set_post, only: %i[show edit update destroy]
@@ -26,7 +28,7 @@ class PostsController < ApplicationController
     else
       render 'new'
     end
-    end
+  end
 
   def update
     if @post.update(post_params)

@@ -1,0 +1,15 @@
+AllCops:
+  Exclude:
+    - 'config/initializers/devise.rb'
+    - 'db/**/*'
+    - 'node_modules/**/*'
+Style/Documentation:
+  Enabled: false
+Layout/LineLength:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Style/GlobalVars:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false

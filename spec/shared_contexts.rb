@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_context 'api request global before and after hooks' do
   before(:each) do
     Warden.test_mode!

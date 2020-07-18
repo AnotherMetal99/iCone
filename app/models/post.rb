@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Post < ApplicationRecord
   validates :image, presence: true
 
@@ -14,7 +16,7 @@ class Post < ApplicationRecord
       image.variant(resize: '600x600!').processed
     else
       'defpost.jpg'
-  end
+    end
   end
 
   private

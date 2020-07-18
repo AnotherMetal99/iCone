@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RelationshipsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user, only: %i[create destroy]
@@ -8,7 +10,7 @@ class RelationshipsController < ApplicationController
 
   def user_following
     @followings = User.where(id: current_user.followings)
- end
+  end
 
   def create
     current_user.follow(@user)
