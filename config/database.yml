@@ -2,8 +2,6 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  # min_messages: warning
-  socket: /tmp/.s.PGSQL.5432
 
 
 development:
