@@ -36,8 +36,11 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
+      - uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install
       - name: Install postgres client
-        run: sudo apt-get install libpq-dev
+        run: sudo apt-get -yqq install libpq-dev
       - name: Install dependencies
         run: |
           gem install bundler
