@@ -26,6 +26,8 @@ jobs:
     services:
       postgres:
         image: postgres:latest
+        ports:
+        - 3000:3000
         env:
           POSTGRES_USER: ${{ env.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
