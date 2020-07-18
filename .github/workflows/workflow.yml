@@ -34,7 +34,12 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
+      - uses: actions/setup-ruby@v1
+      - uses: actions/checkout@v1
+      - name: Uses Node.js ${{ matrix.node-version }}
+      - uses: actions/setup-node@v1
         with:
+          node-version: ${{ matrix.node-version }}
           ruby-version: ${{ env.RUBY_VERSION }}
       - name: Install postgres client
         run: sudo apt-get install libpq-dev
@@ -44,6 +49,7 @@ jobs:
           bundler install
       - name: Create database
         run: |
+          npm install -g yarn # Extra Step
           bundler exec rails db:create
           bundler exec rails db:migrate
       - name: Run tests
