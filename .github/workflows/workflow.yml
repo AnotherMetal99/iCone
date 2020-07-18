@@ -45,8 +45,8 @@ jobs:
           bundler install
       - name: Create database
         run: |
-          bundler exec rails db:create
-          bundler exec rails db:migrate
+          bundler exec rails db:create test
+          bundler exec rails db:migrate test
       - name: Run tests
         run: bundler exec rake
       - name: Upload coverage results
