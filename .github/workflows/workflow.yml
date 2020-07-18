@@ -1,8 +1,8 @@
 env:
   RUBY_VERSION: 2.7
-  POSTGRES_USER: andrey
-  POSTGRES_PASSWORD: qwe123
-  POSTGRES_DB: andrey
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: postgres
 
 name: Rails tests
 on: [push,pull_request]
@@ -29,19 +29,15 @@ jobs:
         ports:
         - 5432:5432
         env:
-          DATABASE_URL: postgres://posgtres:@localhost:5432/test
-          REDIS_URL: redis://localhost:6379/0
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-ruby@v1
-      - uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install
       - name: Install postgres client
-        run: sudo apt-get -yqq install libpq-dev
+        run: sudo apt-get install libpq-dev
       - name: Install dependencies
         run: |
           gem install bundler
