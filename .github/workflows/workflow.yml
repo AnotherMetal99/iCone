@@ -1,64 +1,120 @@
-env:
-  RUBY_VERSION: 2.7
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_DB: postgres
-
-name: Rails tests
-on: [push,pull_request]
+name: CI
+on: [push, pull_request]
 jobs:
-  rubocop-test:
-    name: Rubocop
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: ${{ env.RUBY_VERSION }}
-      - name: Install Rubocop
-        run: gem install rubocop
-      - name: Check code
-        run: rubocop
-  rspec-test:
-    name: RSpec
-    needs: rubocop-test
-    runs-on: ubuntu-18.04
+  specs:
+    name: specs
+    runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:latest
+        image: postgres:10.8
         ports:
         - 5432:5432
         env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: ""
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: ${{ env.RUBY_VERSION }}
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install
-      - name: Install postgres client
-        run: |
+    - name: Install libraries
+      run: |
+        sudo apt-get update
         sudo apt-get install -y postgresql-client libpq-dev
-     - name: Configure databases
+
+    - name: Configure databases
       run: |
         echo "Postgres"
         psql -h localhost -c 'create database "test-database";' -U postgres
-      - name: Install dependencies
+
+    - uses: actions/checkout@v1
+
+    - name: Set up Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+
+    - name: Install bundler and gems
+      run: |
+        gem install bundler --no-document
+        bundle config GITHUB__COM $GITHUB_ACCESS_TOKEN
+        bundle install --jobs 4 --retry 3
+      env:
+        GITHUB_ACCESS_TOKEN: $
+
+    - name: Run tests
+      run: |
+        pg_config --version
+        bin/rails db:schema:load RAILS_ENV=test
+        bin/rspec
+  rubocop:
+    name: rubocop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install libraries
         run: |
-          gem install bundler
-          bundler install
-      - name: Create database
-        run: |
-          bundler exec rails db:create
-          bundler exec rails db:migrate
-      - name: Run tests
-        run: bundler exec rake
-      - name: Upload coverage results
-        uses: actions/upload-artifact@master
-        if: always()
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
         with:
-          name: coverage-report
-          path: coverage
+          ruby-version: 2.6.5
+
+      - uses: actions/checkout@v1
+
+      - name: Install bundler and rubocop
+        run: |
+          gem install bundler --no-document
+          bundle config GITHUB__COM $GITHUB_ACCESS_TOKEN
+          bundle install --jobs 4 --retry 3 --with=test
+        env:
+          GITHUB_ACCESS_TOKEN: $
+
+      - name: Run rubocop checks
+        run: bundle exec rubocop -D -c .rubocop.yml
+
+  swagger:
+    name: swagger
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.9.0
+
+      - name: Install swagger cli
+        run: |
+          npm install -g swagger-cli
+
+      - uses: actions/checkout@v1
+
+      - name: Run swagger linter check
+        run: |
+          for f in doc/freeletics_api_v{1,2,3}.yml; do swagger-cli validate $f || break 0; done
+
+  slack_success:
+    name: slack
+    runs-on: ubuntu-latest
+    needs: [swagger, rubocop, specs]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Success Notify
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_USERNAME: "Action Bot"
+          SLACK_ICON: "https://github.com/freeletics.png"
+          SLACK_TITLE: "Success"
+          SLACK_MESSAGE: "All checks passed :white_check_mark:"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  slack_failure:
+    name: slack
+    runs-on: ubuntu-latest
+    needs: [slack_success]
+    if: failure() || cancelled()
+    steps:
+      - uses: actions/checkout@v1
+      - name: Success Notify
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_USERNAME: "Action Bot"
+          SLACK_ICON: "https://github.com/freeletics.png"
+          SLACK_COLOR: "#FF0000"
+          SLACK_TITLE: "Failure"
+          SLACK_MESSAGE: "Some checks failed :x:"
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
