@@ -41,10 +41,9 @@ jobs:
           cmd: install
       - name: Install postgres client
         run: |
-        sudo apt-get update
         sudo apt-get install -y postgresql-client libpq-dev
      - name: Configure databases
-       run: |
+      run: |
         echo "Postgres"
         psql -h localhost -c 'create database "test-database";' -U postgres
       - name: Install dependencies
@@ -53,8 +52,8 @@ jobs:
           bundler install
       - name: Create database
         run: |
-          bundler exec rails db:create RAILS_ENV=test
-          bundler exec rails db:migrate RAILS_ENV=test
+          bundler exec rails db:create
+          bundler exec rails db:migrate
       - name: Run tests
         run: bundler exec rake
       - name: Upload coverage results
