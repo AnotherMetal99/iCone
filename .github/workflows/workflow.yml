@@ -50,7 +50,6 @@ jobs:
              bundle exec rails webpacker:compile
           else
              echo "No need to compile assets."
-        fi
       - name: Create database
         run: |
           bundler exec rails db:create RAILS_ENV=test
