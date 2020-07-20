@@ -49,8 +49,6 @@ jobs:
       - name: Yarn install
         run: yarn --frozen-lockfile
       - name: Rails test
-        env: # Or as an environment variable
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
           bundle exec rails db:setup
           bundle exec rails test
