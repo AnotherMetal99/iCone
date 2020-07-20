@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_user, only: [:profile]
 
   def index
-  @posts = Post.where(user_id: current_user.followings.pluck(:id)).order(created_at: :desc)
-  @followers = User.where.not(id: current_user.followings)
-  @comment = Comment.new
+    @posts = Post.where(user_id: current_user.followings.pluck(:id)).order(created_at: :desc)
+    @followers = User.where.not(id: current_user.followings)
+    @comment = Comment.new
   end
 
   def profile
@@ -14,7 +16,8 @@ class UsersController < ApplicationController
   end
 
   private
+
   def set_user
- @user= User.find_by_username(params[:username])
+    @user = User.find_by(username: params[:username])
   end
 end

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
-  before_action :authenticate_user!, except: [:show, :index]
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: %i[show index]
+  before_action :set_post, only: %i[show edit update destroy]
 
   def index
     @posts = Post.all
@@ -16,26 +18,24 @@ class PostsController < ApplicationController
     @post = Post.new
   end
 
-  def edit
-
-  end
+  def edit; end
 
   def create
     @post = Post.new(post_params)
     @post.user_id = current_user.id if user_signed_in?
-      if @post.save
-        redirect_to @post
-      else
-        render 'new'
-      end
+    if @post.save
+      redirect_to @post
+    else
+      render 'new'
     end
+  end
 
   def update
-      if (@post.update(post_params))
-          redirect_to @post
-        else
-          render 'edit'
-      end
+    if @post.update(post_params)
+      redirect_to @post
+    else
+      render 'edit'
+    end
   end
 
   def destroy
@@ -44,11 +44,12 @@ class PostsController < ApplicationController
   end
 
   private
+
   def set_post
     @post = Post.find(params[:id])
   end
 
-    def post_params
-      params.require(:post).permit(:body, :image)
-    end
+  def post_params
+    params.require(:post).permit(:body, :image)
+  end
 end

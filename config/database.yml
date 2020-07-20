@@ -7,10 +7,18 @@ default: &default
 development:
   <<: *default
   database: fullstack-challenge
+  host: localhost
+  port: 5432
+  username: postgres
+  password: postgres
 
 test:
   <<: *default
   database: testdb
+  host: localhost
+  port: 5432
+  username: postgres
+  password: postgres
 
 production:
   adapter: postgresql
