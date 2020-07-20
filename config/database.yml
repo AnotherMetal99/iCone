@@ -9,7 +9,7 @@ development:
   database: fullstack-challenge
   host: localhost
   port: 5432
-  username: andrey
+  username: postgres
   password: postgres
 
 test:
@@ -17,7 +17,7 @@ test:
   database: testdb
   host: localhost
   port: 5432
-  username: andrey
+  username: postgres
   password: postgres
 
 production:
