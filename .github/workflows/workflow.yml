@@ -41,6 +41,16 @@ jobs:
         run: |
           gem install bundler
           bundler install
+      - name: Yarn Install
+        run: bin/rails yarn:install
+      - name: Compile Assets
+        shell: bash
+        run: |
+          if [[ ! -d public/packs-test ]]; then
+             bundle exec rails webpacker:compile
+          else
+             echo "No need to compile assets."
+        fi
       - name: Create database
         run: |
           bundler exec rails db:create RAILS_ENV=test
