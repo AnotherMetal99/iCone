@@ -101,11 +101,6 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
-    factory_girl (4.9.0)
-      activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
-      railties (>= 3.0.0)
     ffaker (2.15.0)
     ffi (1.13.1)
     font-awesome-rails (4.7.0.5)
@@ -246,7 +241,7 @@ GEM
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
-    tzinfo (1.2.7)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
       execjs (>= 0.3.0)
@@ -284,7 +279,6 @@ DEPENDENCIES
   database_cleaner-active_record
   devise
   factory_bot_rails
-  factory_girl_rails
   ffaker
   font-awesome-rails (~> 4.7.0)
   jbuilder (~> 2.7)
